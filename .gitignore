@@ -1,0 +1,9 @@
+/auto-save-list
+.cache
+config.el
+/elpa
+/emms
+/manual-pkgs
+recentf*
+tramp
+/transient

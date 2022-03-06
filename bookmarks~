@@ -1,0 +1,15 @@
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("org"
+ (filename . "~/org/")
+ (front-context-string . "tasks.org\n  -rw-")
+ (rear-context-string . "6K Feb  9 19:45 ")
+ (position . 182))
+("Emax"
+ (filename . "~/.emacs.d/")
+ (front-context-string . "config.org\n  -rw")
+ (rear-context-string . "3K Jan 27 19:43 ")
+ (position . 497))
+)

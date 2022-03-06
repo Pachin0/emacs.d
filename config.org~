@@ -1,0 +1,347 @@
+* Setup melpa and use package  
+** Melpa
+  #+begin_src emacs-lisp
+    (require 'package)
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+    (package-initialize)
+  #+end_src
+  
+** Install use-package
+  #+begin_src emacs-lisp
+    (unless (package-installed-p 'use-package)
+      (package-install 'use-package))
+    (setq use-package-always-ensure t)
+  #+end_src
+  
+* Evil Mode
+  #+begin_src emacs-lisp
+    (use-package evil
+      :init
+      (setq evil-want-keybinding nil)
+      (setq evil-vsplit-window-right t)
+      (setq evil-split-window-below t)
+      (setq evil-want-C-u-scroll t)
+      (setq evil-undo-system 'undo-tree)
+      (evil-mode))
+
+    (use-package evil-collection
+      :ensure t
+      :after evil
+      :config
+      (evil-collection-init))
+
+    (use-package org-evil
+      :ensure t
+      :init
+      (setq org-evil-mode t))
+  #+end_src
+  
+** Undo tree for C-R evil mode 
+  #+begin_src emacs-lisp
+    (use-package undo-tree
+      :ensure t)
+  #+end_src
+* Theme
+** Doom Theme
+  #+begin_src emacs-lisp
+    (use-package doom-themes
+      :ensure t
+      :config
+      (setq doom-themes-enable-bold t)
+      (setq doom-themes-enable-italic t)
+      :init
+      (load-theme 'doom-vibrant t))
+  #+end_src
+** Modeline
+  #+begin_src emacs-lisp
+    (use-package doom-modeline
+      :ensure t
+      :init (doom-modeline-mode 1))
+  #+end_src
+  
+* Ce Font
+** Main Fonts
+  #+begin_src emacs-lisp
+    (set-face-attribute 'default nil
+                        :font "JetBrainsMono Nerd Font 17"
+                        :weight 'medium)
+    (set-face-attribute 'variable-pitch nil
+                        :font "Cantarell 11"
+                        :weight 'medium)
+    (set-face-attribute 'fixed-pitch nil
+                        :font "JetBrainsMono Nerd Font 17"
+                        :weight 'medium)
+    (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font 17"))
+ #+end_src
+
+** All the icons
+  #+begin_src emacs-lisp
+    (use-package all-the-icons
+      :ensure t
+      :if (display-graphic-p))
+  #+end_src
+
+** Org Superstar
+  #+begin_src emacs-lisp
+    (use-package org-superstar
+      :ensure t
+      :after org 
+      :init 
+      (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+  #+end_src
+* Custom Keybinds 
+** Global Map
+*** Zoom text
+  #+begin_src emacs-lisp
+    (global-set-key (kbd "C-=") 'text-scale-increase)
+    (global-set-key (kbd "C--") 'text-scale-decrease)
+  #+end_src
+*** Buffer Switching  
+  #+begin_src emacs-lisp
+    (global-set-key (kbd "<C-tab>") 'next-buffer)
+    (global-set-key (kbd "<C-iso-lefttab>") 'previous-buffer)
+  #+end_src
+
+*** Org Mode agenda bind and files
+  #+begin_src emacs-lisp
+    (global-set-key (kbd "C-c a") #'org-agenda)
+    (setq org-agenda-files '("~/org"))
+  #+end_src
+  
+*** Calfw 
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c c") 'cfw:open-org-calendar)
+#+end_src
+*** Fill Paragraph on superkey + q
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-q") 'fill-paragraph)
+#+End_src
+    
+** org-read-date-minibuffer-local-map 
+*** Calendar Scheduling with vim keys
+  #+begin_src emacs-lisp
+     ;;evilificate calendar in org-mode
+    (define-key org-read-date-minibuffer-local-map (kbd "s-h") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-day 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-l") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-day 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-k") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-week 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-j") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-week 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-H") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-month 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-L") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-month 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-K") (lambda () (interactive) (org-eval-in-calendar '(calendar-backward-year 1))))
+    (define-key org-read-date-minibuffer-local-map (kbd "s-J") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-year 1))))
+  #+end_src
+
+* State  
+*** Org Indent Mode
+  #+begin_src emacs-lisp
+    ;;(add-hook 'org-mode-hook 'org-indent-mode) 
+  #+end_src
+  
+*** Truncation and line numbers
+Disable line truncation and enable visual line mode
+  #+begin_src emacs-lisp
+    (global-display-line-numbers-mode 1)
+    (global-visual-line-mode 1)
+    (setq truncate-lines nil)
+    (setq display-line-numbers-type 'relative)
+  #+end_src
+
+*** Set Scroll Distance  
+  #+begin_src emacs-lisp
+  #+end_src
+
+*** Set global undo tree mode 
+#+begin_src emacs-lisp
+  (global-undo-tree-mode)
+#+end_src
+*** Set global company mode  
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook 'global-company-mode)
+#+end_src
+*** Set scroll margins 
+Make the buffer move down 5 lines before it runs off the screen
+#+begin_src emacs-lisp
+  (setq scroll-margin 5)
+#+end_src
+*** Set global cursor line highlight 
+#+begin_src emacs-lisp
+  (global-hl-line-mode 1)
+#+end_src
+
+* HUD Settings 
+  #+begin_src emacs-lisp
+    (menu-bar-mode   -1)
+    (tool-bar-mode   -1)
+    (scroll-bar-mode -1)
+  #+end_src
+
+* Which Key
+  #+begin_src emacs-lisp
+    (use-package which-key
+      :ensure t)
+    (which-key-mode)
+  #+end_src
+  
+* Sudo-Edit
+** load sudo-edit to get sudo on dired and files
+  #+begin_src emacs-lisp
+    (use-package sudo-edit
+      :ensure t)
+  #+end_src
+  
+* Dashboard
+  #+begin_src emacs-lisp
+    (use-package dashboard
+      :ensure t
+      :custom
+      (dashboard-startup-banner 'logo)
+      :config
+      (dashboard-setup-startup-hook))
+      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  #+end_src 
+
+* Calf - Calendar with agenda
+  #+begin_src emacs-lisp
+    (use-package calfw-org
+      :ensure t)
+  #+end_src 
+
+* Programming 
+** Emacs-lsp mode
+  #+begin_src emacs-lisp
+    (use-package lsp-mode
+      :ensure t
+      :config 
+      (add-hook 'haskell-mode-hook #'lsp)
+      (add-hook 'haskell-literate-mode-hook #'lsp)
+      (add-hook 'c-mode-hook #'lsp)
+      :init
+      (setq lsp-keymap-prefix "C-c l")
+      )
+
+    (use-package lsp-ui
+      :ensure t)
+    (use-package flycheck
+      :ensure t
+      :init (global-flycheck-mode))
+    (use-package company-quickhelp
+      :ensure t
+      :init (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
+    (use-package lsp-lens
+      :config
+      (setq lsp-lens-mode nil)
+      :ensure nil)
+
+  #+end_src
+*** lsp-haskell 
+#+begin_src emacs-lisp
+  (use-package lsp-haskell
+    :ensure t
+    :custom
+    (setq lsp-haskell-server-path "haskell-language-server-wrapper")
+    (setq lsp-haskell-server-args ())
+    (setq lsp-log-io t))
+
+#+end_src
+
+*** C++/C 
+#+begin_src emacs-lisp
+#+end_src
+
+** Buffer minimap
+#+begin_src emacs-lisp
+  ;;(use-package minimap
+  ;;  :ensure t
+  ;;  :init
+  ;;  (setq minimap-window-location 'right)
+  ;;  (setq minimap-minimum-width 0.05)
+  ;;  (setq minimap-automatically-delete-window t))
+#+end_src
+
+* EMMS for no reason
+#+begin_src emacs-lisp
+  (use-package emms
+    :ensure t
+    :config
+    (setq emms-source-file-default-directory "~/Drives/Drive1/Music-2")
+    :init
+    (emms-all)
+    (emms-default-players))
+
+  (use-package emms-player-mpd 
+    :ensure nil
+    :custom
+    (emms-player-mpd-server-name "127.0.1.1")
+    (Emms-Player-mp-server-port "6500"))
+#+end_src
+* Writting 
+** Word count  
+Use wc-mode command to toggle the word counter
+#+begin_src emacs-lisp
+  (use-package wc-mode
+    :ensure t)
+  (add-to-list 'global-mode-string '("" wc-buffer-stats))
+#+end_src
+** adaptive-wrap 
+#+begin_src emacs-lisp
+  (use-package adaptive-wrap 
+    :ensure t)
+#+end_src
+* Evil Org Agenda ?? 
+** TODO Get agenda evil 
+#+begin_src emacs-lisp
+  (use-package evil-org)
+#+end_src
+
+* TreeView
+#+begin_src emacs-lisp
+#+end_src
+
+* Dired Setup 
+  #+begin_src emacs-lisp
+    (use-package dired
+      :ensure nil
+
+      :commands (dired dired-jump)
+
+      :bind (("C-x C-j" . dired-jump))
+
+      :custom
+      (dired-listing-switches "-lagho --group-directories-first")
+
+      :config
+      (evil-collection-define-key 'normal 'dired-mode-map
+        "h" 'dired-up-directory
+        "l" 'dired-find-file)
+      (setq delete-by-moving-to-trash t))
+  #+end_src
+  
+* Org 
+  #+begin_src emacs-lisp
+    (use-package org
+
+      :ensure nil
+      :config
+      (setq org-hide-leading-stars t)
+      (add-hook 'org-mode-hook (lambda () (org-indent-mode 1))))
+  
+  #+end_src
+
+* Pass
+#+begin_src emacs-lisp
+  (use-package pass)
+#+end_src
+
+* Beacon 
+#+begin_src emacs-lisp
+  (use-package beacon
+    :ensure nil
+    :custom
+    (beacon-mode nil))
+#+end_src
+
+* selectric mode? 
+#+begin_src emacs-lisp
+  (use-package selectric-mode
+    :ensure t)
+#+end_src
