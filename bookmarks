@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("xmonad-config"
+(("mass-storage"
+ (filename . "/volumes/mass-storage/")
+ (front-context-string . "purchased-collec")
+ (rear-context-string . "16 Mar  8 23:35 ")
+ (position . 479))
+("xmonad-config"
  (filename . "~/.xmonad/")
  (front-context-string . "xmonad.hs\n  -rw-")
  (rear-context-string . "9K Mar  2 01:23 ")

@@ -12,7 +12,16 @@
       (package-install 'use-package))
     (setq use-package-always-ensure t)
   #+end_src
-  
+* Get Environment Variables 
+Emacs is started as a daemon and so does not inherit bash's path variable which are used for many locally compiled programs
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t
+    :init
+    (when (daemonp)
+      (exec-path-from-shell-initialize)))
+#+end_src
+
 * Evil Mode
   #+begin_src emacs-lisp
     (use-package evil
@@ -85,8 +94,7 @@
   #+begin_src emacs-lisp
     (use-package org-superstar
       :ensure t
-      :after org 
-      :init 
+      :init
       (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
   #+end_src
 * Custom Keybinds 
@@ -131,21 +139,9 @@
     (define-key org-read-date-minibuffer-local-map (kbd "s-J") (lambda () (interactive) (org-eval-in-calendar '(calendar-forward-year 1))))
   #+end_src
 
-** emacs-config-mode-map 
-Load emacs config. Could fail if the init.el is not in ~/.emacs.d/init.el
-  #+begin_src emacs-lisp
-    (define-key emacs-config-mode-map
-      (kbd "C-c l e") (lambda () (interactive) (load "~/.emacs.d/init.el"))
-      )
-  #+end_src
 * State  
-*** Org Indent Mode
-  #+begin_src emacs-lisp
-    ;;(add-hook 'org-mode-hook 'org-indent-mode) 
-  #+end_src
-  
 *** Truncation and line numbers
-Disable line truncation and enable visual line mode
+    Disable line truncation and enable visual line mode
   #+begin_src emacs-lisp
     (global-display-line-numbers-mode 1)
     (global-visual-line-mode 1)
@@ -201,8 +197,9 @@ Make the buffer move down 5 lines before it runs off the screen
     (use-package dashboard
       :ensure t
       :custom
-      (dashboard-startup-banner 'logo)
+      (dashboard-startup-banner "~/Pictures/illuminaty-small.png")
       :config
+      (setq dashboard-center-content t)
       (dashboard-setup-startup-hook))
       (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   #+end_src 
@@ -228,27 +225,25 @@ Make the buffer move down 5 lines before it runs off the screen
 
     (use-package lsp-ui
       :ensure t)
+
     (use-package flycheck
       :ensure t
       :init (global-flycheck-mode))
+
     (use-package company-quickhelp
       :ensure t
       :init (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
-    (use-package lsp-lens
-      :config
-      (setq lsp-lens-mode nil)
-      :ensure nil)
 
+    (use-package yasnippet
+      :ensure t
+      )
   #+end_src
 *** lsp-haskell 
 #+begin_src emacs-lisp
   (use-package lsp-haskell
     :ensure t
     :custom
-    (setq lsp-haskell-server-path "haskell-language-server-wrapper")
-    (setq lsp-haskell-server-args ())
-    (setq lsp-log-io t))
-
+    lsp-haskell-server-path "~/.ghcup/bin/haskell-language-server-wrapper")
 #+end_src
 
 *** C++/C 
@@ -326,12 +321,11 @@ Use wc-mode command to toggle the word counter
 * Org 
   #+begin_src emacs-lisp
     (use-package org
-
       :ensure nil
+      :custom
+      (org-startup-indented t)
       :config
-      (setq org-hide-leading-stars t)
-      (add-hook 'org-mode-hook (lambda () (org-indent-mode 1))))
-  
+      (setq org-hide-leading-stars t))
   #+end_src
 
 * Pass
@@ -353,11 +347,10 @@ Use wc-mode command to toggle the word counter
     :ensure t)
 #+end_src
 
-* custom modes 
-** emacs config minor mode
-Will be used to bind the keybind to reload emacs config
+* Helm
 #+begin_src emacs-lisp
-  (define-minor-mode emacs-config-mode
-    "Emacs config minor mode for keymap"
-    :keymap (make-sparse-keymap))
+  ;;(use-package helm
+  ;;  :ensure t)
 #+end_src
+
+
